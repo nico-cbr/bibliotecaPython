@@ -1,4 +1,4 @@
-# implementar sistema de pontuação
+# terminar sistema de pontuação
 
 import pygame
 from pygame.locals import *
@@ -7,28 +7,26 @@ from OpenGL.GL import *
 # Declarando variaveis e tamanhos
 LARGURA_JANELA = 640
 ALTURA_JANELA = 480
+pygame.display.set_caption("Jogo Pong")
+tempo = pygame.time.Clock();
 
 # declarando variaveis da bola
 xDaBola = 0
 yDaBola = 0
 tamanhoDaBola = 20
 raioBola = tamanhoDaBola / 2
-velocidadeDaBolaEmX = 0.05
-velocidadeDaBolaEmY = 0.05
+velocidadeDaBolaEmX = 5
+velocidadeDaBolaEmY = 5
 
 # variaveis da raquete
 yDoPlayer1 = 0
 yDoPlayer2 = 0
-compPlayer = 10
-largPlayer = 5
 
-colidiu = False
-
+# Placar
 meusPontos = 0
 pontosOp = 0
-
 # declarando funções de desenho, altura, largura
-
+    
 # retangulo (bola)
 def vBola():
     global xDaBola, yDaBola
@@ -73,16 +71,16 @@ def movimentoPlayer():
     keys = pygame.key.get_pressed()
 
     if keys[K_w]:
-        yDoPlayer1 = yDoPlayer1 + .2
+        yDoPlayer1 = yDoPlayer1 + 8
 
     if keys[K_s]:
-        yDoPlayer1 = yDoPlayer1 - .2
+        yDoPlayer1 = yDoPlayer1 - 8
 
     if keys[K_i]:
-        yDoPlayer2 = yDoPlayer2 + .2
+        yDoPlayer2 = yDoPlayer2 + 8
 
     if keys[K_k]:
-        yDoPlayer2 = yDoPlayer2 - .2
+        yDoPlayer2 = yDoPlayer2 - 8
 
         # Prevenir que as raquetes saiam da tela
     if yDoPlayer1 + alturaDosPlayers() / 2 > ALTURA_JANELA / 2:
@@ -96,8 +94,19 @@ def movimentoPlayer():
         yDoPlayer2 = -ALTURA_JANELA / 2 + alturaDosPlayers() / 2
 
 # funçoes para funcionamento do game
+# def atualizarPlacar():
+    
+def desenharPlacar():
+    fonte = pygame.font.Font(None, 36)
+    texto = f"Player 1: {meusPontos}  |  Player 2: {pontosOp}"
+    textoSurface = fonte.render(texto, True, (255, 255, 255), (0, 0, 0))
+    textoData = pygame.image.tostring(textoSurface, "RGB", True)
+    glWindowPos2d(LARGURA_JANELA // 2 - 200, ALTURA_JANELA - 40)
+    glDrawPixels(textoSurface.get_width(), textoSurface.get_height(), GL_RGB, GL_UNSIGNED_BYTE, textoData)
+
+
 def verificarColisao():
-    global xDaBola, yDaBola, velocidadeDaBolaEmX, velocidadeDaBolaEmY, yDoPlayer1, yDoPlayer2
+    global xDaBola, yDaBola, velocidadeDaBolaEmX, velocidadeDaBolaEmY, yDoPlayer1, yDoPlayer2, meusPontos, pontosOp
     if (xDaBola + tamanhoDaBola / 2 > xDoPlayer2() - larguraDosPlayers() / 2
     and yDaBola - tamanhoDaBola / 2 < yDoPlayer2 + alturaDosPlayers() / 2
     and yDaBola + tamanhoDaBola / 2 > yDoPlayer2 - alturaDosPlayers() / 2):
@@ -117,6 +126,17 @@ def verificarColisao():
     if xDaBola < -LARGURA_JANELA / 2 or xDaBola > LARGURA_JANELA / 2:
         xDaBola = 0
         yDaBola = 0
+                # Atualizando pontos quando a bola sai da tela
+    if xDaBola < -LARGURA_JANELA / 2:
+        pontosOp += 1
+        # atualizarPlacar()
+        xDaBola, yDaBola = 0, 0
+
+    if xDaBola > LARGURA_JANELA / 2:
+        meusPontos += 1
+        # atualizarPlacar()
+        xDaBola, yDaBola = 0, 0
+
 
 # funçoes para o laço while
 def atualizar():
@@ -139,14 +159,23 @@ def desenhar():
     bolaDesenho()
     p1Desenho()
     p2Desenho()
+    desenharPlacar()
     
     pygame.display.flip()
 
 pygame.init()
 pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA), DOUBLEBUF | OPENGL)
+# atualizarPlacar()
 
 # Laço para rodar jogo
-while True:
+rodando = True
+while rodando:
+    for evento in pygame.event.get():
+        if evento.type == QUIT:
+            rodando = False
+    tempo.tick(60)
     atualizar()
     desenhar()
-    pygame.event.pump()
+
+
+pygame.quit()
