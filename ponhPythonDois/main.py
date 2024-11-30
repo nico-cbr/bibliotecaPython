@@ -96,13 +96,13 @@ def movimentoPlayer():
 # funçoes para funcionamento do game
 # def atualizarPlacar():
     
-def desenharPlacar():
-    fonte = pygame.font.Font(None, 36)
-    texto = f"Player 1: {meusPontos}  |  Player 2: {pontosOp}"
-    textoSurface = fonte.render(texto, True, (255, 255, 255), (0, 0, 0))
-    textoData = pygame.image.tostring(textoSurface, "RGB", True)
-    glWindowPos2d(LARGURA_JANELA // 2 - 200, ALTURA_JANELA - 40)
-    glDrawPixels(textoSurface.get_width(), textoSurface.get_height(), GL_RGB, GL_UNSIGNED_BYTE, textoData)
+# def desenharPlacar():
+#     fonte = pygame.font.Font(None, 36)
+#     texto = f"Player 1: {meusPontos}  |  Player 2: {pontosOp}"
+#     textoSurface = fonte.render(texto, True, (255, 255, 255), (0, 0, 0))
+#     textoData = pygame.image.tostring(textoSurface, "RGB", True)
+#     glWindowPos2d(LARGURA_JANELA // 2 - 200, ALTURA_JANELA - 40)
+#     glDrawPixels(textoSurface.get_width(), textoSurface.get_height(), GL_RGB, GL_UNSIGNED_BYTE, textoData)
 
 
 def verificarColisao():
