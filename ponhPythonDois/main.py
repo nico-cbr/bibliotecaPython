@@ -160,7 +160,7 @@ def desenhar():
     bolaDesenho()
     p1Desenho()
     p2Desenho()
-    desenharPlacar()
+    # desenharPlacar()
     
     pygame.display.flip()
 
