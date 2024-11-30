@@ -1,4 +1,5 @@
-# terminar sistema de pontuação
+# Projeto finalizado  30/11/24 Horario 22:15
+#  o placar nao foi colocado devido a dificuldades.
 
 import pygame
 from pygame.locals import *
